@@ -5,28 +5,23 @@ public class Candy {
         int n = ratings.length;
         int[] candies = new int[n];
         Arrays.fill(candies, 1);
-        boolean isChanged = true;
-        while (isChanged) {
-            isChanged = false;
-
-            for (int i = 0; i < n; i++) {
-
-                // check left neighbour
-                if (i > 0 && ratings[i] > ratings[i - 1] && !(candies[i] > candies[i - 1])) {
-                    candies[i] = candies[i - 1] + 1;
-                    isChanged = true;
-                }
-                // check right neighbour
-                if (i < n - 1 && ratings[i] > ratings[i + 1] && !(candies[i] > candies[i + 1])) {
-                    candies[i] = candies[i + 1] + 1;
-                    isChanged = true;
-                }
+        for (int i = 1; i < n; i++) {
+            // check left neighbour
+            if (ratings[i] > ratings[i - 1] && !(candies[i] > candies[i - 1])) {
+                candies[i] = candies[i - 1] + 1;
             }
-            System.out.println(Arrays.toString(candies));
         }
+        System.out.println("after left to right " + Arrays.toString(candies));
+        for (int i = n - 2; i >= 0; i--) {
+            // check left neighbour from end
+            if (ratings[i] > ratings[i + 1] && !(candies[i] > candies[i + 1])) {
+                candies[i] = candies[i + 1] + 1;
+            }
+        }
+        System.out.println("after right to left " + Arrays.toString(candies));
 
         int sum = 0;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0;i < n; i++) {
             sum += candies[i];
         }
         return sum;
