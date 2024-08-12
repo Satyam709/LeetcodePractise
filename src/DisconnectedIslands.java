@@ -1,153 +1,70 @@
 import java.util.Arrays;
 
 public class DisconnectedIslands {
-    private int totalEdges =0;
-    private int minDays=0;
+    private int minDays;
+
     public int minDays(int[][] grid) {
+        // Reset minDays for each test case
+        minDays = 0;
 
         int r = grid.length;
         int c = grid[0].length;
 
-        int[][] graph = new int[r][c];
-//        int[][] marked = new int[r][c];
+        if (countIslands(grid) > 1) {
+            return 0; // Already disconnected
+        }
+
+        // Try removing one land cell and check if it disconnects the grid
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                if (grid[i][j] == 1) {
+                    grid[i][j] = 0; // Remove land
+                    if (countIslands(grid) > 1) {
+                        return 1; // Disconnected with one removal
+                    }
+                    grid[i][j] = 1; // Restore land
+                }
+            }
+        }
+
+        // If it cannot be disconnected by removing one land cell, return 2
+        return 2;
+    }
+
+    private int countIslands(int[][] grid) {
+        int r = grid.length;
+        int c = grid[0].length;
+        boolean[][] visited = new boolean[r][c];
+        int count = 0;
 
         for (int i = 0; i < r; i++) {
             for (int j = 0; j < c; j++) {
-                int edges = 1;
-                if (!isIsland(grid, i, j)) {
-//                    marked[i][j] = -2; // not a island
-                    continue;
-                }
-                if (isEdge(grid, i + 1, j)) {
-                    edges++;
-                }
-                if (isEdge(grid, i - 1, j)) {
-                    edges++;
-                }
-                if (isEdge(grid, i, j + 1)) {
-                    edges++;
-                }
-                if (isEdge(grid, i, j - 1)) {
-                    edges++;
-                }
-                graph[i][j] = edges;
-                totalEdges+=edges;
-            }
-        }
-        return findMinDays(graph);
-    }
-
-
-    private int findMinDays(int[][] graph) {
-        // go dfs
-        System.out.println("total edges = "+totalEdges);
-        while (true){
-            int r = graph.length;
-            int c = graph[0].length;
-            int totalComponents = 0;
-            int[][] marked = new int[graph.length][graph[0].length];
-            for (int i = 0; i < r; i++) {
-                for (int j = 0; j < c; j++) {
-                    if (isIsland(graph, i, j) && marked[i][j] >= 0) {
-                        int[] maxEdgeIndex = new int[]{i, j};
-                        dfs_operate(graph, marked, i, j, maxEdgeIndex);
-                        totalComponents++;
-                        fillWater(graph, maxEdgeIndex[0], maxEdgeIndex[1]);
-                    }
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    dfs(grid, visited, i, j);
+                    count++;
                 }
             }
-            System.out.println("Connected Components = " + totalComponents);
-            System.out.println("Graph generated :");
-            printMat(graph);
-
-            System.out.println("Marked generated :");
-            printMat(marked);
-            System.out.println("total edges after = "+totalEdges);
-            if (totalEdges == totalComponents)break;
         }
-        if (totalEdges==1)return minDays+1;
-        return minDays;
+
+        return count;
     }
 
-
-    private void dfs_operate(int[][] graph, int[][] marked, int i, int j, int[] maxEdgeIndex) {
-
-        if (marked[i][j] < 0)
+    private void dfs(int[][] grid, boolean[][] visited, int i, int j) {
+        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] == 0 || visited[i][j]) {
             return;
-
-        marked[i][j] = -1;
-
-        if (graph[i][j] > graph[maxEdgeIndex[0]][maxEdgeIndex[1]]) {
-            maxEdgeIndex[0] = i;
-            maxEdgeIndex[1] = j;
         }
 
-        // visit on edges
-        if (isEdge(graph, i + 1, j)) {
-            dfs_operate(graph, marked, i + 1, j, maxEdgeIndex);
-        }
-        if (isEdge(graph, i - 1, j)) {
-            dfs_operate(graph, marked, i - 1, j, maxEdgeIndex);
-        }
-        if (isEdge(graph, i, j + 1)) {
-            dfs_operate(graph, marked, i, j + 1, maxEdgeIndex);
-        }
-        if (isEdge(graph, i, j - 1)) {
-            dfs_operate(graph, marked, i, j - 1, maxEdgeIndex);
-        }
+        visited[i][j] = true;
 
-    }
-
-    private void fillWater(int[][] graph, int i, int j) {
-        if (graph[i][j]>1) {
-            totalEdges-=(2*graph[i][j]-1);
-            minDays++;
-            graph[i][j] = 0;
-        }
-
-        if (isEdge(graph, i + 1, j)) {
-            if (graph[i+1][j]>1)
-                graph[i+1][j]--;
-        }
-        if (isEdge(graph, i - 1, j)) {
-            if (graph[i-1][j]>1)
-                graph[i-1][j]--;
-        }
-        if (isEdge(graph, i, j + 1)) {
-            if (graph[i][j+1]>1)
-                graph[i][j+1]--;
-        }
-        if (isEdge(graph, i, j - 1)) {
-            if (graph[i][j - 1] > 1)
-                graph[i][j - 1]--;
-        }
-    }
-
-    private void printMat(int[][] mat) {
-        System.out.println("Printing...");
-        for (int[] i : mat) {
-            System.out.println(Arrays.toString(i));
-        }
-    }
-
-    private boolean isEdge(int[][] grid, int i, int j) {
-        return !isInvalid(i, j, grid.length, grid[0].length) && isIsland(grid, i, j);
-    }
-
-    private boolean isIsland(int[][] grid, int i, int j) {
-        return grid[i][j] != 0;
-    }
-
-    private boolean isInvalid(int i, int j, int rows, int cols) {
-        return i < 0 || i >= rows || j < 0 || j >= cols;
+        dfs(grid, visited, i + 1, j);
+        dfs(grid, visited, i - 1, j);
+        dfs(grid, visited, i, j + 1);
+        dfs(grid, visited, i, j - 1);
     }
 
     public static void main(String[] args) {
-        //int[][] grid = {{0, 1, 1, 0}, {0, 1, 1, 0}, {0, 0, 0, 0}};
-        int[][] grid = {{1,1}};
+        int[][] grid = {{1, 1}};
         DisconnectedIslands obj = new DisconnectedIslands();
-        System.out.println("Min days =  " + obj.minDays(grid));
-        System.out.println("Original Grid:");
-        obj.printMat(grid);
+        System.out.println("Min days = " + obj.minDays(grid));
     }
 }
