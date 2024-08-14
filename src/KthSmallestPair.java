@@ -3,27 +3,19 @@ import java.util.*;
 public class KthSmallestPair {
     public int smallestDistancePair(int[] nums, int k) {
         int n = nums.length;
-        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int[] diffs = new int[1000000];
+
         for (int i = 0, t = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 int diff = Math.abs(nums[i] - nums[j]);
-                Integer val = map.get(diff);
-                if (val == null) val = 1;
-                else val++;
-                map.put(diff, val);
+                diffs[diff]++;
             }
         }
-
         int count = 0;
-        System.out.println(map);
-        Set<Integer> keys = map.keySet();
-        List<Integer> sortedKeys = new ArrayList<>(keys.size());
-        sortedKeys.addAll(keys);
 
-        Collections.sort(sortedKeys);
-
-        for (int i : sortedKeys) {
-            count += map.get(i);
+        for (int i = 0; i < diffs.length; i++){
+            count += diffs[i];
             if (k <= count)
                 return i;
         }
@@ -39,7 +31,7 @@ public class KthSmallestPair {
 
         long ti = System.currentTimeMillis();
 
-        System.out.println(obj.smallestDistancePair(arrr, k));
+        System.out.println(obj.smallestDistancePair(arr, 2));
 
         long tf = System.currentTimeMillis();
 
