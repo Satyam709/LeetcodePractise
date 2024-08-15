@@ -4,9 +4,13 @@ public class KthSmallestPair {
     public int smallestDistancePair(int[] nums, int k) {
         int n = nums.length;
 
-        int[] diffs = new int[1000000];
+        int max = Integer.MIN_VALUE;
+        for (int i : nums)
+            max = Math.max(max,i);
 
-        for (int i = 0, t = 0; i < n; i++) {
+        int[] diffs = new int[max+1];
+
+        for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 int diff = Math.abs(nums[i] - nums[j]);
                 diffs[diff]++;
@@ -31,7 +35,7 @@ public class KthSmallestPair {
 
         long ti = System.currentTimeMillis();
 
-        System.out.println(obj.smallestDistancePair(arr, 2));
+        System.out.println(obj.smallestDistancePair(arrr, 2));
 
         long tf = System.currentTimeMillis();
 
