@@ -1,91 +1,39 @@
+import java.util.HashSet;
+import java.util.PriorityQueue;
+
 public class UghlyNo {
-
-    private static class Node{
-        long d;
-        Node next;
-    }
-
-
-    private Node head = null;
-    private  Node tail = null;
-
-    private void add(int data){
-        Node newNode = new Node();
-        newNode.d = data;
-        if (head == null)
-        {
-            head = newNode;
-        }
-        else
-            tail.next = newNode;
-        tail = newNode;
-    }
-
-    private void add(Node tail,long data){
-
-        if (tail == null)return;
-
-        Node tmp = tail.next;
-        Node newNode = new Node();
-        newNode.d = data;
-        tail.next = newNode;
-        newNode.next =tmp;
-    }
-
-    private void print(){
-        Node h = head;
-        while (h!=null){
-            System.out.print(h.d+" ");
-            h = h.next;
-        }
-        System.out.println();
-    }
-
 
     public int nthUglyNumber(int n) {
 
-        if (n==1)return 1;
+        PriorityQueue<Long> pq = new PriorityQueue<>(10);
+        HashSet<Long> marked = new HashSet<>(10);
+        pq.add(1L);
+        marked.add(1L);
 
-        add(1);
-        add(2);
-        add(3);
-        add(5);
+        int count = 0;
+        long num = 1;
 
-        Node t = head.next;
-        int count = 2;
+        while (count != n) {
 
-        while (count!=n){
-
-            Node h = t;
-
-            while(h.next!=null && h.next.d < 2*t.d){
-                h =h.next;
-            }
-
-            if (h.next == null || h.next.d != 2*t.d){
-                add(h,2*t.d);
-            }
-
-            while(h.next!=null && h.next.d < 3*t.d){
-                h =h.next;
-            }
-
-            if (h.next == null || h.next.d != 3*t.d){
-                add(h,3*t.d);
-            }
-
-            while(h.next!=null && h.next.d < 5*t.d){
-                h =h.next;
-            }
-
-            if (h.next == null || h.next.d != 5*t.d){
-                add(h,5*t.d);
-            }
-            t = t.next;
+            num = Math.toIntExact(pq.poll());
             count++;
 
+            if (!marked.contains(2 * num)) {
+                pq.add(2 * num);
+                marked.add(2 * num);
+            }
+
+            if (!marked.contains(3 * num)) {
+                pq.add(3 * num);
+                marked.add(3 * num);
+            }
+
+            if (!marked.contains(5 * num)) {
+                pq.add(5 * num);
+                marked.add(5 * num);
+            }
         }
-        return (int) t.d;
+        return (int)num;
     }
 
     public static void main(String[] args) {
