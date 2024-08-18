@@ -1,61 +1,95 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class UghlyNo {
 
-    private List<Integer> primes;
+    private static class Node{
+        long d;
+        Node next;
+    }
+
+
+    private Node head = null;
+    private  Node tail = null;
+
+    private void add(int data){
+        Node newNode = new Node();
+        newNode.d = data;
+        if (head == null)
+        {
+            head = newNode;
+        }
+        else
+            tail.next = newNode;
+        tail = newNode;
+    }
+
+    private void add(Node tail,long data){
+
+        if (tail == null)return;
+
+        Node tmp = tail.next;
+        Node newNode = new Node();
+        newNode.d = data;
+        tail.next = newNode;
+        newNode.next =tmp;
+    }
+
+    private void print(){
+        Node h = head;
+        while (h!=null){
+            System.out.print(h.d+" ");
+            h = h.next;
+        }
+        System.out.println();
+    }
+
 
     public int nthUglyNumber(int n) {
-        int k =1;
-        int c =0;
-        while (c<n){
-            while (!check(k)) {
-               // System.out.println("not ->" + k);
-                k++;
-            };
 
-            c++;
-            if (c==n)return k;
-            k++;
-        }
-        return k;
-    }
+        if (n==1)return 1;
 
-    private boolean check(int n){
-        while (n%2==0)n/=2;
-        while (n%3==0)n/=3;
-        while (n%5==0)n/=5;
+        add(1);
+        add(2);
+        add(3);
+        add(5);
 
-        return n == 1;
-    }
+        Node t = head.next;
+        int count = 2;
 
+        while (count!=n){
 
-    private void createPrimes(int n) {
-        boolean[] sieve = new boolean[n + 1];
-        Arrays.fill(sieve, true);
+            Node h = t;
 
-        primes = new ArrayList<>((int) Math.sqrt(n));
-
-        for (int i = 2; i * i <= n; i++) {
-
-            if (!sieve[i])
-                continue;
-
-            for (int j = i * i; j <= n; j += i) {
-                sieve[j] = false;
+            while(h.next!=null && h.next.d < 2*t.d){
+                h =h.next;
             }
-        }
 
-        for (int i = 2; i < sieve.length; i++) {
-            if (sieve[i])
-                primes.add(i);
+            if (h.next == null || h.next.d != 2*t.d){
+                add(h,2*t.d);
+            }
+
+            while(h.next!=null && h.next.d < 3*t.d){
+                h =h.next;
+            }
+
+            if (h.next == null || h.next.d != 3*t.d){
+                add(h,3*t.d);
+            }
+
+            while(h.next!=null && h.next.d < 5*t.d){
+                h =h.next;
+            }
+
+            if (h.next == null || h.next.d != 5*t.d){
+                add(h,5*t.d);
+            }
+            t = t.next;
+            count++;
+
         }
+        return (int) t.d;
     }
 
     public static void main(String[] args) {
-        int s = 10;
-
+        int s = 1690;
         UghlyNo obj = new UghlyNo();
         System.out.println(obj.nthUglyNumber(s));
     }
