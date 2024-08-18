@@ -1,39 +1,20 @@
-import java.util.HashSet;
-import java.util.PriorityQueue;
-
 public class UghlyNo {
 
     public int nthUglyNumber(int n) {
+        int[] nums =new int[1690];
+        nums[0] = 1;
+        int ugly,i2 = 0,i3=0,i5=0;
 
-        PriorityQueue<Long> pq = new PriorityQueue<>(10);
-        HashSet<Long> marked = new HashSet<>(10);
-        pq.add(1L);
-        marked.add(1L);
+        for(int i=1;i<1690;i++){
+            ugly = Math.min(Math.min(nums[i2]*2,nums[i3]*3),nums[i5]*5);
+            nums[i] = ugly;
 
-        int count = 0;
-        long num = 1;
+            if(ugly == nums[i2]*2) ++i2;
+            if(ugly == nums[i3]*3) ++i3;
+            if(ugly == nums[i5]*5) ++i5;
 
-        while (count != n) {
-
-            num = Math.toIntExact(pq.poll());
-            count++;
-
-            if (!marked.contains(2 * num)) {
-                pq.add(2 * num);
-                marked.add(2 * num);
-            }
-
-            if (!marked.contains(3 * num)) {
-                pq.add(3 * num);
-                marked.add(3 * num);
-            }
-
-            if (!marked.contains(5 * num)) {
-                pq.add(5 * num);
-                marked.add(5 * num);
-            }
         }
-        return (int)num;
+        return nums[n-1];
     }
 
     public static void main(String[] args) {
