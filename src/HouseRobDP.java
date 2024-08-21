@@ -4,6 +4,7 @@ public class HouseRobDP {
     public int rob(int[] nums) {
 
         int[] dp = new int[nums.length + 1];
+
         Arrays.fill(dp,-1);
         int ans =  Math.max(dpFind(dp, nums, nums.length),dpFind(dp, nums, nums.length-1));
         System.out.println(Arrays.toString(dp));
