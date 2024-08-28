@@ -16,16 +16,16 @@ public class KthLargest {
     }
 
     public int add(int val) {
-        int index=1;
-        for (int i :nums){
-            if (val<=i){
+        int index = 1;
+        for (int i : nums) {
+            if (val <= i) {
                 break;
             }
             index++;
         }
-        nums.add(index-1,val);
+        nums.add(index - 1, val);
         System.out.println("size" + nums.size());
-        return nums.get(nums.size()-target);
+        return nums.get(nums.size() - target);
     }
 
     public static void main(String[] args) {
