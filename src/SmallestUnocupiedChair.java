@@ -44,8 +44,9 @@ public class SmallestUnocupiedChair {
 
             pq.add(new Friend(satChair, times[indexes[i]][1]));
 
-            if (indexes[i] == targetFriend)
+            if (indexes[i] == targetFriend) {
                 return satChair;
+            }
 
         }
         return -1;
