@@ -3,6 +3,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class GroupIntervals {
+
     public static int minGroups(int[][] intervals) {
         int n = intervals.length;
         Arrays.sort(intervals, Comparator.comparingInt(i -> i[0]));
