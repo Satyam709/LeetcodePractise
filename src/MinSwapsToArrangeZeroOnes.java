@@ -12,6 +12,7 @@ public class MinSwapsToArrangeZeroOnes {
         int right = l - ones, left = right - 1;
 
         while (right < l) {
+
             while (s.charAt(right) != '0') {
                 right++;
                 if (right >= l) return minSwaps;
@@ -23,7 +24,6 @@ public class MinSwapsToArrangeZeroOnes {
         }
 
         return minSwaps;
-
     }
 
     public static long minimumSteps2(String s) {
