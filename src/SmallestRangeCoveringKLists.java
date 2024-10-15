@@ -25,7 +25,8 @@ public class SmallestRangeCoveringKLists {
         int k = nums.size();
         HashMap<Integer, Iterator<Integer>> map = new HashMap<>(k);
 
-        PriorityQueue<IdxVal> pq = new PriorityQueue<>();
+        PriorityQueue<IdxVal> pq = new PriorityQueue<>(k);
+        PriorityQueue<IdxVal> maxPq = new PriorityQueue<>(k*50+5,Collections.reverseOrder());
         int idx = 0;
 
         int max;
@@ -34,6 +35,7 @@ public class SmallestRangeCoveringKLists {
             int crnt = map.get(idx).next();
             //max = Math.max(crnt, max);
             pq.add(new IdxVal(crnt, idx));
+            maxPq.add(new IdxVal(crnt, idx));
             idx++;
         }
 
@@ -51,7 +53,7 @@ public class SmallestRangeCoveringKLists {
                 break;
             System.out.println(pq);
             IdxVal minList = pq.peek();
-            max = getCrntMax(pq);
+            max = maxPq.peek().val;
 
             int val = minList.val;
             int listNo;
@@ -69,6 +71,7 @@ public class SmallestRangeCoveringKLists {
                     IdxVal tmpIdx = new IdxVal(tmp, listNo);
                     System.out.println("adding "+tmpIdx);
                     pq.add(tmpIdx);
+                    maxPq.add(tmpIdx);
                 }
             }
 
@@ -81,14 +84,14 @@ public class SmallestRangeCoveringKLists {
         }
         return new int[]{lw,up,diff};
     }
-
-    private static int getCrntMax(PriorityQueue<IdxVal> q) {
-        IdxVal max = new IdxVal(Integer.MIN_VALUE, -1);
-        for (IdxVal v : q) {
-            max = v.val > max.val ? v : max;
-        }
-        return max.val;
-    }
+//
+//    private static int getCrntMax(PriorityQueue<IdxVal> q) {
+//        IdxVal max = new IdxVal(Integer.MIN_VALUE, -1);
+//        for (IdxVal v : q) {
+//            max = v.val > max.val ? v : max;
+//        }
+//        return max.val;
+//    }
 
 
     public static void main(String[] args) {
