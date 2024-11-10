@@ -5,28 +5,31 @@ public class MaxMovesDp {
         int m = grid.length;
         ;
         int n = grid[0].length;
-        int[][] dp = new int[m][n];
+        int[] prev = new int[m];
+
         int max = 0;
 
         for (int j = 1; j < n; j++) {
+            int[] crnt = new int[m];
             boolean isAny = false;
             for (int i = 0; i < m; i++) {
                 for (int k = i - 1; k <= i + 1; k++) {
                     if (k >= 0 && k < m && grid[k][j - 1] < grid[i][j]) {
-                        if (j>1 && dp[k][j-1] == 0) {
+                        if (j>1 && prev[k] == 0) {
                             System.out.println("got here");
                             continue;
                         }
                         System.out.println("hey i=" + i + " j=" + j);
                         isAny = true;
-                        dp[i][j] = Math.max(dp[i][j], dp[k][j - 1] + 1);
-                        max = Math.max(max, dp[i][j]);
+                        crnt[i] = Math.max(crnt[i], prev[k] + 1);
+                        max = Math.max(max, crnt[i]);
                     }
                 }
             }
             if (!isAny)return max;
+            prev = crnt;
         }
-        System.out.println(Arrays.deepToString(dp));
+       // System.out.println(Arrays.deepToString(c));
         return max;
     }
 
