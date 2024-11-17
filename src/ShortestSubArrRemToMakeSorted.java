@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.Cycle;
+
 import java.util.Arrays;
 import java.util.Map;
 
