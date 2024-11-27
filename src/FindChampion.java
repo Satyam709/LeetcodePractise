@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
 public class FindChampion {
     record Degree(int v, int deg) implements Comparable<Degree> {
