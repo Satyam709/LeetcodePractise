@@ -57,7 +57,6 @@ public class ShortestRoad {
     }
 
     public static void main(String[] args) {
-//        int[][] queries = {{2,4},{0,2},{0,4}};
         int[][] queries = {{1, 4}, {2, 4}};
         int n = 6;
         System.out.println(Arrays.toString(shortestDistanceAfterQueries(n, queries)));
