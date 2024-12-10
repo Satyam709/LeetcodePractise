@@ -2,54 +2,39 @@ import java.util.HashMap;
 
 public class MaxLengthSpecialString {
     public static int maximumLength(String s) {
-
         int max = -1;
-        s = s+',';
         HashMap<String, Integer> map = new HashMap<>();
         int l = 0, r = 0;
 
+        for (r = 0; r <= s.length(); r++) {
 
-        StringBuilder tmp = new StringBuilder(s.length());
-        char last = '.';
+            char ch = r == s.length() ? '.' : s.charAt(r); // creates a sudo char for last evaluation
 
+            if (s.charAt(l) != ch) { // if the window gets a different character, evaluate it
 
-        for (r = 0; r < s.length(); r++) {
+                int sub_len = r - l;
 
-            char ch = s.charAt(r);
+                String sub = s.substring(l, r);
+                int len = sub_len;
 
-            if (last != ch) {
-
-                String sub  = tmp.toString();
-                System.out.println("found substring "+ sub);
-                int len = sub.length();
-
-                for (int i = 1; i <= sub.length(); i++) {
-                    String key = sub.substring(0,i);
-
-                    int val = map.getOrDefault(key,0) + len--;
-                    if (val>2){
-                        max = Math.max(i,max);
+                for (int i = 1; i <= sub_len; i++) {
+                    String key = sub.substring(0, i);
+                    int val = map.getOrDefault(key, 0) + len--;
+                    if (val > 2) {
+                        max = Math.max(i, max);
                     }
-                    System.out.println("key = "+key);
-                    map.put(key,val);
+
+                    map.put(key, val);
+                    l = r;
                 }
-                tmp = new StringBuilder(s.length());
-                System.out.println("updated map"+ map);
             }
-
-            tmp.append(ch);
-            last = ch;
-            System.out.println("tmp at normal "+tmp);
         }
-
-
-
         return max;
     }
 
     public static void main(String[] args) {
         String s = "aaaa";
-
-        System.out.println("out1 = "+maximumLength(s));
+        System.out.println("out1 = " + maximumLength(s));
     }
+
 }
