@@ -4,9 +4,8 @@ public class MaxLengthSpecialString {
     public static int maximumLength(String s) {
         int max = -1;
         HashMap<String, Integer> map = new HashMap<>();
-        int l = 0, r = 0;
-
-        for (r = 0; r <= s.length(); r++) {
+        int l = 0;
+        for (int r = 0; r <= s.length(); r++) {
 
             char ch = r == s.length() ? '.' : s.charAt(r); // creates a sudo char for last evaluation
 
