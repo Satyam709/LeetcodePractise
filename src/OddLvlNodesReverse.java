@@ -29,22 +29,30 @@ public class OddLvlNodesReverse {
     }
 
     private ArrayList<Stack<Integer>> getStack(TreeNode root) {
-        ArrayList<Stack<Integer>> nodes = new ArrayList<>();
+        int depth = getMaxDepth(root);
+        System.out.println("depth = " + depth);
+        ArrayList<Stack<Integer>> nodes = new ArrayList<>(depth);
+        for (int i = 0; i < depth; i++) {
+            nodes.add(i, new Stack<>());
+        }
         getNodes(root, nodes, 0);
         return nodes;
     }
 
+    private int getMaxDepth(TreeNode root) {
+        int lvl = 0;
+        while (root != null) {
+            root = root.left;
+            lvl++;
+        }
+        return lvl;
+    }
+
+
     private void getNodes(TreeNode root, ArrayList<Stack<Integer>> li, int lvl) {
         if (root == null) return;
-        Stack<Integer> stk;
-        if (lvl >= li.size()) {
-            stk = new Stack<>();
-            li.add(lvl, stk);
-        }else stk = li.get(lvl);
 
-        System.out.println("adding at lvl "+lvl+ " : "+root.val);
-
-        stk.push(root.val);
+        li.get(lvl).push(root.val);
 
         getNodes(root.left, li, lvl + 1);
         getNodes(root.right, li, lvl + 1);
@@ -54,7 +62,6 @@ public class OddLvlNodesReverse {
     private void putNodes(TreeNode root, ArrayList<Stack<Integer>> li, int lvl) {
         if (root == null) return;
         if (lvl % 2 != 0) {
-            System.out.println("replacing at lvl "+lvl+ " : "+root.val+" -> "+li.get(lvl).peek());
             root.val = li.get(lvl).pop();
         }
         putNodes(root.left, li, lvl + 1);
