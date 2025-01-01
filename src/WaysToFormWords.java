@@ -22,15 +22,15 @@ public class WaysToFormWords {
         }
 
         int tarLen = target.length();
-        long[] freqData = new long[target.length()];
+        int[] freqData = new int[target.length()];
         freqData[0] = 1 ;
 
         for (int i = 0; i < len; i++) {
             System.out.println("running for index = " + i);
-            long[] tmp = Arrays.copyOf(freqData,tarLen);
+            int[] tmp = Arrays.copyOf(freqData,tarLen);
             for (int j = 0; j < tarLen; j++) {
 
-                long prevFreq = freqData[j];
+                int prevFreq = freqData[j];
 
                 if (prevFreq < 1) continue;
 
@@ -38,11 +38,11 @@ public class WaysToFormWords {
 
                 if (freq < 1) continue;
 
-                prevFreq *= freq;
+                prevFreq = (int) (((long) prevFreq * freq)%lt);
                 if (j == tarLen - 1) count += prevFreq;
                 else {
                     System.out.println("updated with "+prevFreq +" for j="+j);
-                    tmp[j + 1] += (int) (prevFreq % lt);
+                    tmp[j + 1] = (int)((tmp[j+1]+(long)prevFreq)%lt);
                 }
 
             }
