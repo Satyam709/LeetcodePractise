@@ -2,7 +2,7 @@ public class Daily_28_01_25 {
     public static int findMaxFish(int[][] grid) {
         int max = 0;
         int m = grid.length;
-        ;
+
         int n = grid[0].length;
         int[] nr = {1, -1, 0, 0};
         int[] nc = {0, 0, -1, 1};
