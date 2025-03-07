@@ -29,8 +29,38 @@ public class BipartiteGraph {
         return true;
     }
 
+
+    public static boolean isBipartite2(int[][] graph) {
+        int[] color = new int[graph.length];
+        Arrays.fill(color,-1);
+        for (int j = 0; j < graph.length; j++) {
+            if (color[j] == -1){
+                color[j] = 0;
+                if (!dfs(graph,color,j,-1))return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean dfs(int[][] graph ,int[] color , int v,int p){
+        if (p!=-1 && color[v] != -1){
+            return true;
+        }
+        if (p!=-1)
+            color[v] = 1^color[p];
+        for (int i:graph[v]){
+            if (color[i] == -1){
+                if (!dfs(graph,color,i,v))return false;
+            } else if (color[i] == color[v]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         int[][] graph = {{1,2,3},{0,2},{0,1,3},{0,2}};
         System.out.println(isBipartite(graph));
+        System.out.println(isBipartite2(graph));
     }
 }
