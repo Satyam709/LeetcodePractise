@@ -29,19 +29,29 @@ public class MaxAndSeqAfterOP {
             int target = 1 << i;
             System.out.println("bit = " + i + ", target= " + target);
             PriorityQueue<int[]> pq = new PriorityQueue<>(new comaprator());
+            int tm = m; // denotes the temp resized 'm'
             for (int j = 0; j < nums2.length; j++) {
-                int opReq = Math.max(0, target - nums2[j]); // if nums[j] > 0 target than the bit is already
-                                                            // set take it as zero
-                if (pq.size() == m) {
+                // if nums[j] > 0 target than the bit is already
+                // set take it as zero
+                int opReq = Math.max(0, target - nums2[j]);
+
+                // if pq is full but there is a extra element with zero op=> take tis
+                // this will be eventually filteredout and if not this will not effect the and
+                // inc size of pq to accomodate this for sure
+                pq.add(new int[] { nums2[j], opReq });
+                if (pq.size() > tm) {
                     int[] polled = pq.poll();
+                    if (polled[1] == 0) {
+                        tm++;
+                        pq.add(polled);
+                    }
                     System.out.println("size reached polled = " + Arrays.toString(polled));
                 }
-                pq.add(new int[] { nums2[j], opReq });
             }
 
             // now lets take and sum the top m
             long sum = 0;
-            int[] newAr = new int[m];
+            int[] newAr = new int[tm];
             int l = 0;
             while (!pq.isEmpty()) {
                 int[] polled = pq.poll();
@@ -51,7 +61,7 @@ public class MaxAndSeqAfterOP {
             }
             System.out.println();
 
-            System.out.println("remOP= "+remOp);
+            System.out.println("remOP= " + remOp);
             if (sum <= remOp) {
                 System.out.println("found a valid subset! yay!");
                 // this subset is possible
@@ -85,12 +95,18 @@ public class MaxAndSeqAfterOP {
         int k = 8, m = 2;
         System.out.println("out1 = " + maximumAND(nums, k, m));
 
-
         System.out.println("\n");
 
         nums = new int[] { 1, 2, 8, 4 };
         k = 7;
         m = 3;
         System.out.println("out2 = " + maximumAND(nums, k, m));
+
+        System.out.println("\n");
+
+        nums = new int[] { 82, 55, 96, 50, 71, 83, 45, 69, 32 };
+        k = 50;
+        m = 4;
+        System.out.println("out3 = " + maximumAND(nums, k, m));
     }
 }
